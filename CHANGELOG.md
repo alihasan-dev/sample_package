@@ -1,4 +1,7 @@
 ## 1.0.1
+- Add missing path for currency formatter and country picker
+
+## 1.0.1
 - Add currency formatter and country picker bottom sheet
 
 ## 1.0.0
