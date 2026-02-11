@@ -1,5 +1,5 @@
 name: sample_formatter
-description: "A new Flutter package project."
+description: "A lightweight Flutter/Dart package for parsing, formatting, and converting dates with simple and flexible APIs"
 version: 1.0.0
 homepage: https://github.com/alihasan-dev/sample_package
 repository: https://github.com/alihasan-dev/sample_package
