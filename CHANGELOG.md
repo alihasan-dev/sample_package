@@ -1,4 +1,4 @@
-## 1.0.1
+## 1.0.2
 - Add missing path for currency formatter and country picker
 
 ## 1.0.1
