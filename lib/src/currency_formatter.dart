@@ -14,34 +14,22 @@ class CurrencyFormatter {
     final parts = fixed.split('.');
 
     final integerPart = _addCommas(parts[0]);
-    final decimalPart =
-        decimalPlaces > 0 ? '.${parts[1]}' : '';
+    final decimalPart = decimalPlaces > 0 ? '.${parts[1]}' : '';
 
-    final formatted =
-        "${showSymbol ? '$symbol ' : ''}$integerPart$decimalPart";
+    final formatted = "${showSymbol ? '$symbol ' : ''}$integerPart$decimalPart";
 
     return isNegative ? "-$formatted" : formatted;
   }
 
   /// Format without currency symbol
-  static String formatNumber(
-    double amount, {
-    int decimalPlaces = 2,
-  }) {
-    return format(
-      amount,
-      showSymbol: false,
-      decimalPlaces: decimalPlaces,
-    );
+  static String formatNumber(double amount, {int decimalPlaces = 2}) {
+    return format(amount, showSymbol: false, decimalPlaces: decimalPlaces);
   }
 
   /// Compact format
   /// 1200 -> 1.2K
   /// 1500000 -> 1.5M
-  static String compact(
-    double amount, {
-    int decimalPlaces = 1,
-  }) {
+  static String compact(double amount, {int decimalPlaces = 1}) {
     final absAmount = amount.abs();
     final isNegative = amount < 0;
 
@@ -62,8 +50,11 @@ class CurrencyFormatter {
 
   /// Format in Indian numbering system
   /// 12345678 -> 1,23,45,678
-  static String formatIndian(double amount,
-      {int decimalPlaces = 2, String symbol = '₹'}) {
+  static String formatIndian(
+    double amount, {
+    int decimalPlaces = 2,
+    String symbol = '₹',
+  }) {
     final isNegative = amount < 0;
     final absoluteAmount = amount.abs();
 
@@ -72,7 +63,8 @@ class CurrencyFormatter {
 
     String integerPart = parts[0];
     String lastThree = integerPart.substring(
-        integerPart.length - 3 < 0 ? 0 : integerPart.length - 3);
+      integerPart.length - 3 < 0 ? 0 : integerPart.length - 3,
+    );
 
     String remaining = integerPart.length > 3
         ? integerPart.substring(0, integerPart.length - 3)
@@ -87,8 +79,7 @@ class CurrencyFormatter {
 
     buffer.write(lastThree);
 
-    final decimalPart =
-        decimalPlaces > 0 ? '.${parts[1]}' : '';
+    final decimalPart = decimalPlaces > 0 ? '.${parts[1]}' : '';
 
     final formatted = "$symbol ${buffer.toString()}$decimalPart";
 

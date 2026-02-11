@@ -37,7 +37,10 @@ class DateFormatter {
   /// Example:
   /// convert("12-02-2026", "dd-MM-yyyy", "yyyy/MM/dd")
   static String convert(
-      String dateString, String fromPattern, String toPattern) {
+    String dateString,
+    String fromPattern,
+    String toPattern,
+  ) {
     final date = parseWithPattern(dateString, fromPattern);
     return format(date, toPattern);
   }
