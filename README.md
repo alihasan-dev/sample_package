@@ -24,4 +24,4 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  sample_formatter: ^1.0.0
+  sample_formatter: ^1.0.2
