@@ -10,7 +10,7 @@ class CurrencyPicker {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
+      builder: (_) {
         return CurrencyPickerView(
           onSelect: (currentModel) {
             Navigator.pop(context, currentModel);
@@ -52,12 +52,12 @@ class _CurrencyPickerViewState extends State<CurrencyPickerView> {
   void initState() {
     super.initState();
     filteredCurrencies.addAll(CurrencyModel.currencies);
-    if (widget.selectedCountryModel != null && widget.selectedCountryModel!.country.trim().isNotEmpty) {
+    if (widget.selectedCountryModel != null && widget.selectedCountryModel!.countryCode.trim().isNotEmpty) {
+      final selectedCode = widget.selectedCountryModel!.countryCode;
       filteredCurrencies.sort((a, b) {
-        final selectedCode = widget.selectedCountryModel!.countryCode;
         if (a.countryCode == selectedCode) return -1;
         if (b.countryCode == selectedCode) return 1;
-        return 0;
+        return a.country.compareTo(b.country);
       });
     } 
     _searchController.addListener(_filterCountries);
@@ -66,15 +66,41 @@ class _CurrencyPickerViewState extends State<CurrencyPickerView> {
   void _filterCountries() {
     final query = _searchController.text.trim().toLowerCase();
     showCancelSymbol = query.isNotEmpty;
+
     setState(() {
-      if (query.isEmpty) return;
-      filteredCurrencies = CurrencyModel.currencies.where((item) {
-        return item.country.toLowerCase().contains(query) ||
-            item.currencyCode.contains(query) ||
-            item.currencySymbol.contains(query) ||
-            item.currencyName.toLowerCase().contains(query);
-      }).toList();
+      if (query.isEmpty) {
+        filteredCurrencies = List.from(CurrencyModel.currencies);
+      } else {
+        filteredCurrencies = CurrencyModel.currencies.where((item) {
+          return item.country.toLowerCase().contains(query) ||
+              item.currencyCode.toLowerCase().contains(query) ||
+              item.currencySymbol.contains(query) ||
+              item.currencyName.toLowerCase().contains(query);
+        }).toList();
+      }
+      if (widget.selectedCountryModel != null) {
+        final selectedCode = widget.selectedCountryModel!.countryCode;
+        filteredCurrencies.sort((a, b) {
+          if (a.countryCode == selectedCode) return -1;
+          if (b.countryCode == selectedCode) return 1;
+          return 0;
+        });
+      }
     });
+  }
+
+  List<CurrencyModel> get _orderedCurrencies {
+    if (widget.selectedCountryModel == null) {
+      return filteredCurrencies;
+    }
+
+    final selectedCode = widget.selectedCountryModel!.countryCode;
+
+    final selected = filteredCurrencies.where((e) => e.countryCode == selectedCode);
+
+    final others = filteredCurrencies.where((e) => e.countryCode != selectedCode);
+
+    return [...selected, ...others];
   }
 
   @override
@@ -163,20 +189,29 @@ class _CurrencyPickerViewState extends State<CurrencyPickerView> {
                           Expanded(
                             child: Text(
                               country.currencySymbol, 
-                              style: theme.textTheme.bodySmall
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontSize: 12,
+                                color: Colors.black
+                              )
                             ),
                           ),
                           Expanded(
                             child: Text(
                               country.currencyCode, 
-                              style: theme.textTheme.bodySmall
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontSize: 12,
+                                color: Colors.black
+                              )
                             ),
                           ),
                           Expanded(
                             flex: 2, 
                             child: Text(
                               country.country, 
-                              style: theme.textTheme.bodySmall
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontSize: 12,
+                                color: Colors.black
+                              )
                             ),
                           ),
                         ],
